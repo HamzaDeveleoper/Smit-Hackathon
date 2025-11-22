@@ -1,16 +1,16 @@
 document.addEventListener('DOMContentLoaded', () => {
 
-    // --- DOM Elements ---
+    
     const authContainer = document.getElementById('auth-container');
     const appContainer = document.getElementById('app-container');
 
-    // Auth Forms
+
     const loginForm = document.getElementById('login-form');
     const signupForm = document.getElementById('signup-form');
     const showSignupLink = document.getElementById('show-signup');
     const showLoginLink = document.getElementById('show-login');
 
-    // Main App
+
     const userNameSpan = document.getElementById('user-name');
     const logoutBtn = document.getElementById('logout-btn');
     const themeToggleBtn = document.getElementById('theme-toggle');
@@ -21,13 +21,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const postsFeed = document.getElementById('posts-feed');
     const sortOptions = document.getElementById('sort-options');
 
-    // --- State ---
+
     let currentUser = null;
     let posts = [];
     let currentSort = 'latest';
     let currentSearchTerm = '';
 
-    // --- LOCAL STORAGE HELPERS ---
+    
     const getStoredUsers = () => JSON.parse(localStorage.getItem('users')) || [];
     const saveUsers = (users) => localStorage.setItem('users', JSON.stringify(users));
     
@@ -38,7 +38,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const saveCurrentUser = (user) => localStorage.setItem('currentUser', JSON.stringify(user));
     const clearCurrentUser = () => localStorage.removeItem('currentUser');
     
-    // --- THEME ---
+    
     const applyTheme = (theme) => {
         if (theme === 'dark') {
             document.body.classList.add('dark-mode');
@@ -59,7 +59,6 @@ document.addEventListener('DOMContentLoaded', () => {
     applyTheme(savedTheme);
 
 
-    // --- AUTHENTICATION ---
     showSignupLink.addEventListener('click', (e) => {
         e.preventDefault();
         loginForm.style.display = 'none';
@@ -135,7 +134,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
 
-    // --- POSTS ---
+    
     function loadPosts() {
         posts = getStoredPosts();
         renderPosts();
@@ -166,17 +165,16 @@ document.addEventListener('DOMContentLoaded', () => {
         postImageUrlInput.value = '';
     });
     
-    // Using event delegation for like and delete
+
     postsFeed.addEventListener('click', (e) => {
         const target = e.target;
         
-        // Like button
+    
         if(target.classList.contains('like-btn')) {
             const postId = parseInt(target.closest('.post').dataset.id);
             toggleLike(postId);
         }
 
-        // Delete button
         if(target.classList.contains('delete-btn')) {
             const postId = parseInt(target.closest('.post').dataset.id);
             if (confirm('Are you sure you want to delete this post?')) {
@@ -209,7 +207,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
 
-    // --- SEARCH & SORT ---
     searchBar.addEventListener('input', (e) => {
         currentSearchTerm = e.target.value.toLowerCase();
         renderPosts();
@@ -220,18 +217,17 @@ document.addEventListener('DOMContentLoaded', () => {
         renderPosts();
     });
 
-
-    // --- RENDERING ---
+    
     function renderPosts() {
         postsFeed.innerHTML = '';
 
-        // 1. Filter
+    
         let filteredPosts = posts.filter(post => 
             post.text.toLowerCase().includes(currentSearchTerm) ||
             post.author.toLowerCase().includes(currentSearchTerm)
         );
 
-        // 2. Sort
+    
         switch (currentSort) {
             case 'latest':
                 filteredPosts.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
@@ -281,6 +277,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // --- INITIALIZATION ---
+
     checkLoggedInUser();
 });
